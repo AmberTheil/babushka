@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Babushka</title>
+    <style>
+        body {
+            background-color: rgb(240, 240, 240);
+        }
+
+        article {
+            padding: 1em;
+            background-color: white;
+            border: 2px solid #fdab73;
+        }
+
+        .data-container article img {
+            width: 100%;
+        }
+
+        .data-container {
+            margin: 0 auto;
+            display: grid;
+        }
+
+        @media screen and (min-width:580px) {
+            .data-container {
+                padding-left: 10%;
+                padding-right: 10%;
+                grid-gap: 5px;
+                grid-template-columns: repeat(1, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+
+    <main class="container">
+        <section class="data-container">
+            <article class="person">
+                <h2 class="data-navn"></h2>
+                <br>
+                <span class="data-id"></span>
+                <span class="data-kategori"></span>
+                <span class="data-langbeskrivelse"></span>
+                <br>
+                <br> Pris: <span class="data-pris"></span> kr.
+                <br>
+
+                <br>
+                <img class="data-billede" src="" alt="">
+            </article>
+        </section>
+    </main>
+
+    <script>
+        let urlParams = new URLSearchParams(window.location.search);
+        let id = urlParams.get("id");
+        console.log("id");
+
+        let retter;
+        document.addEventListener("DOMContentLoaded", hentJson);
+        async function hentJson() {
+            let myJson = await fetch("menu.json");
+            retter = await myJson.json();
+            visRet();
+        }
+
+        function visRet() {
+            let dest = document.querySelector(".data-container");
+            console.log("id");
+            //løb personlisten igennem og lav en klon
+            retter.forEach(ret => {
+                if (ret.id == id) {
+                    dest.querySelector(".data-navn").textContent = ret.navn;
+                    //                    dest.querySelector(".data-kategori").textContent = ret.kategori;
+                    dest.querySelector(".data-pris").textContent = ret.pris;
+                    dest.querySelector(".data-langbeskrivelse").textContent = ret.langbeskrivelse;
+                    dest.querySelector(".data-billede").src = "imgs/medium/" + ret.billede + "-md.jpg";
+                    dest.querySelector(".data-billede").alt = "Foto af" + ret.billede;
+
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
